@@ -1,4 +1,14 @@
+@font-face {
+  font-family: 'ThirstyScript';
+  src: local('ThirstyScript'), url('vendors/fonts/ThirstyScriptBold.otf') format('opentype');
+}
+
+html {
+  height: 100%;
+}
+
 body {
+  min-height: 500px;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -10,4 +20,26 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.main-green {
+  color: #016310  !important;
+}
+
+.main-bg-green {
+  background-color: #016310  !important;
+}
+
+.title-green {
+  color: #014a0c !important;
+  font-weight: bold
+}
+
+.sweet-loading {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 999;
 }
