@@ -36,7 +36,7 @@ function App() {
             <Header />
             <LogIn setIsLoading={setIsLoading} />
           </Route>
-          {/*<Route path="/signUp">
+          {/*<Route path="/signup">
               <Header/>
               <SignUp setIsLoading={setIsLoading}/>
           </Route>*/}
