@@ -145,7 +145,6 @@ export default function LogIn(props) {
               autoComplete="username"
               autoFocus
               value={username}
-              error={username === ""}
               onChange={(evt) => handleUsernameChange(evt)}
             />
             <TextField
@@ -159,7 +158,6 @@ export default function LogIn(props) {
               id="password"
               autoComplete="current-password"
               value={password}
-              error={password === ""}
               onChange={(evt) => handlePasswordChange(evt)}
             />
             <FormHelperText className={classes.formMessage} error={true}>

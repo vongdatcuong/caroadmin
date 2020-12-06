@@ -1,78 +1,78 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 
 // Material Icons
-import BorderColorIcon from '@material-ui/icons/BorderColor';
+import BorderColorIcon from "@material-ui/icons/BorderColor";
 
 // Components
-import Footer from '../../layouts/Footer';
+import Footer from "../../layouts/Footer";
 
 // Constant && Services
-import authHeader from '../../services/auth-header.js';
-import AuthService from '../../services/auth.service';
-import constant from '../../Utils';
+import authHeader from "../../services/auth-header.js";
+import AuthService from "../../services/auth.service";
+import constant from "../../Utils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(0),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(3),
-    color: '#ffffff',
+    color: "#ffffff",
     backgroundColor: theme.palette.secondary.main,
-    fontSize: '60px',
-    padding: '5px'
+    fontSize: "60px",
+    padding: "5px",
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(2),
   },
   submit: {
     margin: theme.spacing(1, 0, 1),
   },
   formMessageSuccess: {
-    textAlign: 'center',
-    fontSize: '1.1em',
-    color: '#4BB543'
+    textAlign: "center",
+    fontSize: "1.1em",
+    color: "#4BB543",
   },
   formMessageFail: {
-    textAlign: 'center',
-    fontSize: '1.1em',
-    color: '#ff1500'
+    textAlign: "center",
+    fontSize: "1.1em",
+    color: "#ff1500",
   },
   formControl: {
-      color: '#555555 !important'
+    color: "#555555 !important",
   },
   updateIcon: {
-      marginLeft: '10px',
-      verticalAlign: 'middle',
-      cursor: 'pointer'
-  }
+    marginLeft: "10px",
+    verticalAlign: "middle",
+    cursor: "pointer",
+  },
 }));
 
 export default function SignUp(props) {
   const history = useHistory();
   const user = AuthService.getCurrentUser();
-  if (!user){
-      history.push('/login');
+  if (!user) {
+    history.push("/login");
   }
   const classes = useStyles();
   const [disabled, setDisabled] = useState(true);
@@ -81,73 +81,84 @@ export default function SignUp(props) {
   const [email, setEmail] = useState(user.email);
   const [gender, setGender] = useState(user.gender);
   const [isSuccess, setIsSuccess] = useState(true);
-  const [errorMsg, setErrMsg] = useState('');
+  const [errorMsg, setErrMsg] = useState("");
 
   const toggleUpdate = (evt) => {
-      setDisabled(!disabled);
-      const timeout = setTimeout(() => {
-        nameRef.current.focus();
-      }, 100);
-  }
+    setDisabled(!disabled);
+    const timeout = setTimeout(() => {
+      nameRef.current.focus();
+    }, 100);
+  };
 
   const handleNameChange = (evt) => {
     setName(evt.target.value);
-  }
+  };
 
   const handleEmailChange = (evt) => {
     setEmail(evt.target.value);
-  }
+  };
 
   const handleGenderChange = (evt) => {
     setGender(evt.target.value);
-  }
+  };
 
   const handleUpdate = (event) => {
-    event.preventDefault()
-    if (!name || !email || !gender){
-        return;
+    event.preventDefault();
+    if (!name || !email || !gender) {
+      return;
     }
     props.setIsLoading(true);
     const requestOptions = {
-        method: 'POST',
-        headers: Object.assign({
-            'Content-Type': 'application/json'   
-        }, authHeader()),
-        body: JSON.stringify({ 
-            name: name,
-            email: email,
-            gender: gender
-        })
+      method: "POST",
+      headers: Object.assign(
+        {
+          "Content-Type": "application/json",
+        },
+        authHeader()
+      ),
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        gender: gender,
+      }),
     };
-    return fetch(constant.api + constant.userPath + constant.updateProfilePath, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            if (result.isSuccess){
-                AuthService.updateCurrentUser({
-                    name: name,
-                    email: email,
-                    gender: gender
-                })
-            }
-            setIsSuccess(result.isSuccess);
-            setErrMsg(result.message);
-            props.setIsLoading(false);
-    }, (error) => {
-        if (error) {
+    return fetch(
+      constant.api + constant.userPath + constant.updateProfilePath,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then(
+        (result) => {
+          if (result.isSuccess) {
+            AuthService.updateCurrentUser({
+              name: name,
+              email: email,
+              gender: gender,
+            });
+          }
+          setIsSuccess(result.isSuccess);
+          setErrMsg(result.message);
           props.setIsLoading(false);
+        },
+        (error) => {
+          if (error) {
+            props.setIsLoading(false);
+          }
         }
-      })
-  }
+      );
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <AccountBoxIcon className={classes.avatar}>
-        </AccountBoxIcon>
+        <AccountBoxIcon className={classes.avatar}></AccountBoxIcon>
         <Typography component="h1" variant="h5">
-          Your Profile 
-          <BorderColorIcon className={classes.updateIcon} onClick={(evt) => toggleUpdate(evt)}/>
+          Your Profile
+          <BorderColorIcon
+            className={classes.updateIcon}
+            onClick={(evt) => toggleUpdate(evt)}
+          />
         </Typography>
         <form className={classes.form} onSubmit={(evt) => handleUpdate(evt)}>
           <Grid container spacing={2}>
@@ -163,12 +174,11 @@ export default function SignUp(props) {
                 autoFocus
                 inputRef={nameRef}
                 InputProps={{
-                    className: classes.formControl
+                  className: classes.formControl,
                 }}
                 disabled={disabled}
                 value={name}
                 error={name === ""}
-                helperText={name === "" ? 'Enter Name' : ' '}
                 onChange={(evt) => handleNameChange(evt)}
               />
             </Grid>
@@ -183,28 +193,48 @@ export default function SignUp(props) {
                 id="email"
                 label="Email"
                 InputProps={{
-                    className: classes.formControl
+                  className: classes.formControl,
                 }}
                 disabled={disabled}
                 value={email}
-                error={email === ""}
-                helperText={email === "" ? 'Enter Email' : ' '}
+                error={email === "" && !disabled}
                 onChange={(evt) => handleEmailChange(evt)}
               />
             </Grid>
             <Grid item xs={12}>
-            <FormControl component="fieldset">
+              <FormControl component="fieldset">
                 <FormLabel component="legend">Gender</FormLabel>
-                <RadioGroup row aria-label="gender" name="gender1" value={gender} onChange={handleGenderChange}>
-                    <FormControlLabel disabled={disabled} value="Male" control={<Radio />} label="Male" />
-                    <FormControlLabel disabled={disabled} value="Female" control={<Radio />} label="Female" />
+                <RadioGroup
+                  row
+                  aria-label="gender"
+                  name="gender1"
+                  value={gender}
+                  onChange={handleGenderChange}
+                >
+                  <FormControlLabel
+                    disabled={disabled}
+                    value="Male"
+                    control={<Radio />}
+                    label="Male"
+                  />
+                  <FormControlLabel
+                    disabled={disabled}
+                    value="Female"
+                    control={<Radio />}
+                    label="Female"
+                  />
                 </RadioGroup>
-            </FormControl>
+              </FormControl>
             </Grid>
           </Grid>
-          <br/>
-          <FormHelperText className={(isSuccess)? classes.formMessageSuccess : classes.formMessageFail} error={!isSuccess}>
-              {errorMsg}
+          <br />
+          <FormHelperText
+            className={
+              isSuccess ? classes.formMessageSuccess : classes.formMessageFail
+            }
+            error={!isSuccess}
+          >
+            {errorMsg}
           </FormHelperText>
 
           <Button

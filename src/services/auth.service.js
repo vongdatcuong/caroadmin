@@ -13,10 +13,8 @@ class AuthService {
         data: Buffer.from(JSON.stringify(data)).toString("base64"),
       }),
     };
-    return fetch(
-      constant.api + constant.userPath + constant.logInPath,
-      requestOptions
-    )
+    let url = constant.api + constant.userPath + constant.logInPath;
+    return fetch(url, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         if (result.success) {
