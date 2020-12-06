@@ -72,7 +72,7 @@ export default function SignUp(props) {
   const history = useHistory();
   const user = AuthService.getCurrentUser();
   if (!user){
-      history.push('/logIn');
+      history.push('/login');
   }
   const classes = useStyles();
   const [disabled, setDisabled] = useState(true);
