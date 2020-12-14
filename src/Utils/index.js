@@ -1,6 +1,7 @@
-const api = "http://localhost:8080/api";
+const api = "http://localhost:4000/api";
 
 // User
+const adminPath = "/admin";
 const logInPath = "/login";
 const signUpPath = "/signup";
 //
@@ -14,6 +15,7 @@ function queryParams(params) {
 
 export default {
   api,
+  adminPath,
   userPath,
   // User
   logInPath,

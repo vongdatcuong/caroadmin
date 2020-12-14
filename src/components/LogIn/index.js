@@ -189,7 +189,12 @@ export default function LogIn(props) {
               Sign In
             </Button>
             <a
-              href={constant.api + constant.userPath + constant.authGooglePath}
+              href={
+                constant.api +
+                constant.adminPath +
+                constant.userPath +
+                constant.authGooglePath
+              }
               className={classes.anchor}
             >
               <Button
@@ -203,7 +208,12 @@ export default function LogIn(props) {
               </Button>
             </a>
             <a
-              href={constant.api + constant.userPath + constant.authFbPath}
+              href={
+                constant.api +
+                constant.adminPath +
+                constant.userPath +
+                constant.authFbPath
+              }
               className={classes.anchor}
             >
               <Button

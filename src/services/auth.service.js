@@ -13,7 +13,11 @@ class AuthService {
         data: Buffer.from(JSON.stringify(data)).toString("base64"),
       }),
     };
-    let url = constant.api + constant.userPath + constant.logInPath;
+    let url =
+      constant.api +
+      constant.adminPath +
+      constant.userPath +
+      constant.logInPath;
     return fetch(url, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -29,6 +33,12 @@ class AuthService {
             message: result.message,
           };
         }
+      })
+      .catch((err) => {
+        return {
+          isSuccess: false,
+          message: err.message,
+        };
       });
   }
 
@@ -42,7 +52,7 @@ class AuthService {
                 googleID: googleID
             })
         };
-        return fetch(constant.api + constant.userPath + constant.logInWithGoogle, requestOptions)
+        return fetch(constant.api + constant.adminPath + constant.userPath + constant.logInWithGoogle, requestOptions)
             .then(response => response.json())
             .then(result => {
                 if (result.isSuccess){
@@ -71,7 +81,7 @@ class AuthService {
                 facebookID: facebookID
             })
         };
-        return fetch(constant.api + constant.userPath + constant.logInWithFacebook, requestOptions)
+        return fetch(constant.api + constant.adminPath + constant.userPath + constant.logInWithFacebook, requestOptions)
             .then(response => response.json())
             .then(result => {
                 if (result.isSuccess){
@@ -109,7 +119,10 @@ class AuthService {
       }),
     };
     return fetch(
-      constant.api + constant.userPath + constant.signUpPath,
+      constant.api +
+        constant.adminPath +
+        constant.userPath +
+        constant.signUpPath,
       requestOptions
     )
       .then((response) => response.json())
