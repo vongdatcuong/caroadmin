@@ -51,7 +51,7 @@ import JoinRoomDialog from "../../../components/dialogs/JoinRoomDialog";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    paddingTop: theme.spacing(2),
+    paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(6),
     maxWidth: "1400px",
   },
@@ -198,90 +198,9 @@ const DashBoard = (props) => {
   return (
     <main>
       <Container className={classes.container} maxWidth="md">
-        <Grid container spacing={3}>
-          {/* Left */}
-          <Grid item md={9} xs={7} className={classes.right}></Grid>
-          {/* Right */}
-          <Grid item md={3} xs={5} className={classes.left} spacing={5}>
-            <div className={classes.toolbar}>
-              <Button
-                variant="contained"
-                color="primary"
-                className={`${classes.button} ${classes.globalBtn}`}
-                startIcon={<PublicIcon />}
-              >
-                Global
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                className={`${classes.button} ${classes.friendBtn}`}
-                startIcon={<PeopleIcon />}
-              >
-                Staffs
-              </Button>
-            </div>
-            <div className="row">
-              <Box className={classes.box}>
-                <div className={classes.onlineUserWrapper}>
-                  <List dense={true}>
-                    {state.globalUsers.map((user, index) => {
-                      return (
-                        <ListItem>
-                          <ListItemIcon>
-                            <AccountCircleIcon fontSize="large" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={user.username}
-                            className={classes.bold}
-                            disableTypography={true}
-                          />
-                          <ListItemSecondaryAction>
-                            <IconButton edge="end" aria-label="delete">
-                              <FiberManualRecordIcon
-                                fontSize="small"
-                                className={classes.online}
-                              />
-                            </IconButton>
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                </div>
-                <div className={classes.moreWrapper}>
-                  <Typography
-                    variant="h6"
-                    component="h6"
-                    className={classes.more}
-                  >
-                    More
-                  </Typography>
-                </div>
-              </Box>
-            </div>
-            <div className="row">
-              <BoxChat
-                title="GLOBAL"
-                data={state.globalChat}
-                value={chat}
-                onType={handleOnChatChange}
-                onSubmit={handleOnChatSubmit}
-              ></BoxChat>
-            </div>
-          </Grid>
-        </Grid>
+        
+
       </Container>
-      {/*<CreateFormDialog
-        value={openCreateDialog}
-        onCreate={handleOnCreateRoom}
-        onClose={handleCloseCreateDialog}
-      />
-      <JoinRoomDialog
-        value={openJoinDialog}
-        onClose={handleCloseJoinDialog}
-        onJoin={handleOnChooseRoom}
-      />*/}
     </main>
   );
 };

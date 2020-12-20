@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: "none",
     },
   },
+  appBar: {
+    background: '#016310',
+    zIndex: theme.zIndex.drawer,
+  },
   icon: {
     marginRight: theme.spacing(2),
     fontFamily: "ThirstyScript",
@@ -127,7 +131,7 @@ function Header() {
   }
 
   return (
-    <AppBar position="relative" className="main-bg-green">
+    <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         <Typography variant="h6" color="inherit" noWrap>
           <Link href="/dashboard" className={classes.logo}>

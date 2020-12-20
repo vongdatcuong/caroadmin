@@ -19,7 +19,7 @@ import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 const useStyles = makeStyles((theme) => ({
   box: {
     position: "relative",
-    width: "90%",
+    width: "98%",
     height: "325px",
     backgroundColor: "#F6F6F6",
     border: "2px solid #016310",
@@ -108,7 +108,7 @@ const BoxChat = ({ data, title, value, onType, onSubmit }) => {
             value={value}
             onChange={onType}
             className={classes.input}
-            placeholder="Send your Message"
+            placeholder="Send Message"
             inputProps={{ "aria-label": "send message" }}
           />
         </form>

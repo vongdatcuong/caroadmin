@@ -22,9 +22,11 @@ import createHashHistory from "history/createHashHistory";
 import { SocketStateProvider } from "../../../context/socket-context";
 import { LoadingStateProvider } from "../../../context/loading-context";
 import Game from "../../../feature/Main/Game";
-import AccountValidation from "../../../feature/Authentication/AccountValidation"
+import AccountValidation from "../../../feature/Authentication/AccountValidation";
 import ResetPassword from "../../../feature/Authentication/ResetPassword";
 import ForgetPassword from "../../../feature/Authentication/ForgetPassword";
+import LeftDrawer from "../Drawer";
+import Main from "../Main";
 
 //const hashHistory = createHashHistory({ basename: process.env.PUBLIC_URL });
 
@@ -52,9 +54,7 @@ function App() {
                 <Profile />
               </Route>
               <Route path="/dashboard">
-                <Header />
-                <DashBoard />
-                <Footer />
+                <Main content={<DashBoard/>}/>
               </Route>
               {/*<Route path="/game">
                 <Header />
