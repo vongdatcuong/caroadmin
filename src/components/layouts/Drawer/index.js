@@ -22,6 +22,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 // Components
 
 import BoxChat from "../BoxChat";
@@ -36,6 +37,7 @@ import {
   GetChatGlobalRoom,
   ChatGlobalRoom,
 } from "../../../services/socket/base-socket";
+import { Gamepad, VerifiedUserOutlined, Person } from "@material-ui/icons";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
   },
   box: {
     width: "98%",
-    height: "250px",
+    height: "500px",
     backgroundColor: "#F6F6F6",
     border: "2px solid #016310",
     borderRadius: "5px",
@@ -168,13 +170,27 @@ export default function LeftDrawer() {
       dispatch({ type: "Check-listener" });
     }
   }, []);
+  const listData = [
+    {
+      value: "Players",
+      icon: <Person />,
+    },
+    {
+      value: "Staffs",
+      icon: <VerifiedUserOutlined />,
+    },
+    {
+      value: "Games",
+      icon: <Gamepad />,
+    },
+  ];
   const renderOnlineDrawer = (anchor) => (
     <div
       className={clsx(classes.list, {
         [classes.fullList]: anchor === "top" || anchor === "bottom",
       })}
       role="presentation"
-      onBlur={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
     >
       <Container className={classes.container}>
         <Grid>
@@ -231,15 +247,6 @@ export default function LeftDrawer() {
                 </div>
               </Box>
             </div>
-            <div className="row">
-              <BoxChat
-                title="GLOBAL"
-                data={state.globalChat}
-                value={chat}
-                onType={handleOnChatChange}
-                onSubmit={handleOnChatSubmit}
-              ></BoxChat>
-            </div>
           </Grid>
         </Grid>
       </Container>
@@ -257,28 +264,36 @@ export default function LeftDrawer() {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
+        {listData.map((data, index) => (
+          <ListItem button key={data.value}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {data.icon}
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary={data.value} />
           </ListItem>
         ))}
       </List>
       <Divider />
 
       <List>
-        <ListItem button key="Chat">
+        <ListItem button key="OnlineUser">
           <ListItemIcon onClick={toggleDrawer("right", true)}>
-            {<MailIcon />}
+            {<PeopleIcon />}
           </ListItemIcon>
           <ListItemText
-            primary="Chat"
+            primary="Online Users"
             onClick={toggleDrawer("right", true)}
           />
         </ListItem>
       </List>
+      <Divider />
+      <BoxChat
+        title="GLOBAL"
+        data={state.globalChat}
+        value={chat}
+        onType={handleOnChatChange}
+        onSubmit={handleOnChatSubmit}
+      ></BoxChat>
       <Drawer
         anchor={"right"}
         open={onlineUserState["right"]}

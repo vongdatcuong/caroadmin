@@ -24,6 +24,7 @@ class AuthService {
       .then((result) => {
         if (result.success) {
           localStorage.setItem("user", JSON.stringify(result.user));
+          localStorage.setItem("token", JSON.stringify(result.token));
           return {
             isSuccess: true,
             user: result.user,
@@ -55,6 +56,7 @@ class AuthService {
       .then((result) => {
         if (result.isSuccess) {
           localStorage.setItem("user", JSON.stringify(result.user));
+          localStorage.setItem("token", JSON.stringify(result.token));
           return {
             isSuccess: true,
             user: result.user,
@@ -86,6 +88,7 @@ class AuthService {
       .then((result) => {
         if (result.isSuccess) {
           localStorage.setItem("user", JSON.stringify(result.user));
+          localStorage.setItem("token", JSON.stringify(result.token));
           return {
             isSuccess: true,
             user: result.user,
@@ -101,6 +104,7 @@ class AuthService {
 
   logOut() {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   }
 
   signUp(username, password, name, email) {
