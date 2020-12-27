@@ -114,7 +114,7 @@ export default function Game(props) {
 
   const handleOnLeave = () => {
     LeaveRoom(socket, location.state.roomID, user);
-    historyPages.push("/dashboard");
+    historyPages.push("/player");
   };
 
   const handleClick = (i) => {
@@ -199,7 +199,7 @@ export default function Game(props) {
   }
 
   const handleOnCloseRoomRes = () => {
-    historyPages.push("/dashboard");
+    historyPages.push("/player");
     JoinGlobalRoom(socket, user);
   };
 

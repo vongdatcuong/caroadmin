@@ -38,6 +38,7 @@ import {
   ChatGlobalRoom,
 } from "../../../services/socket/base-socket";
 import { Gamepad, VerifiedUserOutlined, Person } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -129,6 +130,7 @@ const useStyles = makeStyles((theme) => ({
 export default function LeftDrawer() {
   const classes = useStyles();
   const { state, dispatch } = useContext(store);
+  const history = useHistory();
   const user = AuthService.getCurrentUser();
   const [socket, setSocket] = useState(state.socket);
   const [chat, setChat] = useState("");
@@ -170,18 +172,24 @@ export default function LeftDrawer() {
       dispatch({ type: "Check-listener" });
     }
   }, []);
+  const handleOnClickMenu = (path) => {
+    history.push(path);
+  }
   const listData = [
     {
       value: "Players",
       icon: <Person />,
+      path: "/player",
     },
     {
       value: "Staffs",
       icon: <VerifiedUserOutlined />,
+      path: "/staff",
     },
     {
       value: "Games",
       icon: <Gamepad />,
+      path: "/game",
     },
   ];
   const renderOnlineDrawer = (anchor) => (
@@ -266,10 +274,13 @@ export default function LeftDrawer() {
       <List>
         {listData.map((data, index) => (
           <ListItem button key={data.value}>
-            <ListItemIcon>
+            <ListItemIcon onClick={() => handleOnClickMenu(data.path)}>
               {data.icon}
             </ListItemIcon>
-            <ListItemText primary={data.value} />
+            <ListItemText
+              primary={data.value}
+              onClick={() => handleOnClickMenu(data.path)}
+            />
           </ListItem>
         ))}
       </List>

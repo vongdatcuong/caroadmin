@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
 export default function LogIn(props) {
   const history = useHistory();
   if (AuthService.getCurrentUser()) {
-    history.push("/dashboard");
+    history.push("/player");
   }
   const classes = useStyles();
   const [username, setUsername] = useState("");
@@ -106,7 +106,7 @@ export default function LogIn(props) {
     const fetch = AuthService.logIn(username, password).then(
       (result) => {
         if (result.isSuccess) {
-          history.push({ pathname: "/dashboard" });
+          history.push({ pathname: "/player" });
         } else {
           setPassword("");
           // Error message

@@ -27,7 +27,8 @@ import ResetPassword from "../../../feature/Authentication/ResetPassword";
 import ForgetPassword from "../../../feature/Authentication/ForgetPassword";
 import LeftDrawer from "../Drawer";
 import Main from "../Main";
-
+import PlayerManager from "../../../feature/Main/PlayerManager";
+import StaffManager from "../../../feature/Main/StaffManager"
 //const hashHistory = createHashHistory({ basename: process.env.PUBLIC_URL });
 
 function App() {
@@ -53,8 +54,11 @@ function App() {
                 <Header />
                 <Profile />
               </Route>
-              <Route path="/dashboard">
-                <Main content={<DashBoard/>}/>
+              <Route path="/player">
+                <Main content={<PlayerManager />} />
+              </Route>
+              <Route path="/staff">
+                <Main content={<StaffManager />} />
               </Route>
               {/*<Route path="/game">
                 <Header />

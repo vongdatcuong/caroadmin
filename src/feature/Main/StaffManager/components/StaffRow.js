@@ -1,6 +1,7 @@
 import {
   Avatar,
   Button,
+  Chip,
   FormControlLabel,
   Grid,
   Switch,
@@ -26,6 +27,7 @@ import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { deepOrange } from "@material-ui/core/colors";
+import authService from "../../../../services/auth.service";
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -61,22 +63,30 @@ function UserRow(props) {
   const classes = useStyles();
   const [isActive, setIsActive] = useState(props.row.isActive);
   const [isBlocked, setIsBlocked] = useState(props.row.isBlocked);
-
+  const [isAdmin, setIsAdmin] = useState(
+    props.row.user_type == "ADMIN" ? true : false
+  );
+  const currentUser = authService.getCurrentUser();
   const onChangeIsActive = (e) => {
     setIsActive(!isActive);
   };
   const onChangeIsBlocked = (e) => {
     setIsBlocked(!isBlocked);
   };
+  const onChangeIsAdmin = (e) => {
+    setIsAdmin(!isAdmin);
+  };
   const onReset = () => {
     setIsActive(row.isActive);
     setIsBlocked(row.isBlocked);
+    setIsAdmin(row.user_type == "ADMIN" ? true : false);
   };
   const onSave = () => {
     const token = JSON.parse(localStorage.getItem("token"));
     const userUpdateData = {
       isActive: isActive,
       isBlocked: isBlocked,
+      isAdmin: isAdmin ? "ADMIN" : "STAFF",
     };
     console.log(userUpdateData);
     const requestOptions = {
@@ -96,8 +106,8 @@ function UserRow(props) {
           setRow(result.payload);
           setIsActive(result.payload.isActive);
           setIsBlocked(result.payload.isBlocked);
+          setIsAdmin(result.payload.user_type == "ADMIN" ? true : false);
         }
-        console.log(result);
       })
       .catch((error) => {
         if (error) {
@@ -117,19 +127,25 @@ function UserRow(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" align="left">
           {row.name}
         </TableCell>
         <TableCell align="right">{row.username}</TableCell>
         <TableCell align="right">{row.email}</TableCell>
-        <TableCell align="right">
-          {row.isActive ? (
-            <VerifiedUserIcon color="primary" />
+        <TableCell align="right">{row.created_at.substring(0, 10)}</TableCell>
+        <TableCell align="center">
+          {row.user_type === "ADMIN" ? (
+            <Chip color="primary" size="small" label="Admin" />
           ) : (
-            <RemoveCircleOutlineIcon color="secondary" />
+            <Chip
+              color="primary"
+              size="small"
+              variant="outlined"
+              label="Staff"
+            />
           )}
         </TableCell>
-        <TableCell align="right">
+        <TableCell align="center">
           {row.isBlocked ? (
             <BlockIcon color="secondary" />
           ) : (
@@ -138,7 +154,7 @@ function UserRow(props) {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
@@ -200,6 +216,27 @@ function UserRow(props) {
                   <FormControlLabel
                     style={{ width: 140, marginRight: 10, marginLeft: 10 }}
                     control={
+                      <Switch
+                        title="Is Admin"
+                        checked={isAdmin}
+                        onChange={onChangeIsAdmin}
+                        disabled={
+                          row._id == currentUser._id ||
+                          row.username == "admin" ||
+                          (currentUser.username != "admin" && row.user_type == "ADMIN")
+                            ? true
+                            : false
+                        }
+                      />
+                    }
+                    label="Is Admin"
+                    labelPlacement="end"
+                  />
+                </Grid>
+                <Grid item alignItems="center" direction="row">
+                  <FormControlLabel
+                    style={{ width: 140, marginRight: 10, marginLeft: 10 }}
+                    control={
                       <Switch checked={isActive} onChange={onChangeIsActive} />
                     }
                     label="Is Active"
@@ -208,7 +245,7 @@ function UserRow(props) {
                 </Grid>
                 <Grid item alignItems="center" direction="row">
                   <FormControlLabel
-                    style={{ width: 140 }}
+                    style={{ width: 140, marginLeft: 10 }}
                     control={
                       <Switch
                         title="Is Blocked"

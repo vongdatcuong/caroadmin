@@ -134,7 +134,7 @@ function Header() {
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         <Typography variant="h6" color="inherit" noWrap>
-          <Link href="/dashboard" className={classes.logo}>
+          <Link href="/player" className={classes.logo}>
             Admin Caro Online
           </Link>
         </Typography>

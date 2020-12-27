@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp(props) {
   const history = useHistory();
   if (AuthService.getCurrentUser()) {
-    history.push("/dashboard");
+    history.push("/player");
   }
   const {loadingState, dispatchLoading} = useContext(loadingStore);
   const classes = useStyles();

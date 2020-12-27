@@ -1,41 +1,25 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import constant from "../../../Utils";
+import { Grid, TextField } from "@material-ui/core";
+import Container from "@material-ui/core/Container";
+import Paper from "@material-ui/core/Paper";
 // Material UI Core
-import { makeStyles, rgbToHex, useTheme } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
-import Box from "@material-ui/core/Box";
-import Collapse from "@material-ui/core/Collapse";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import Container from "@material-ui/core/Container";
-import IconButton from "@material-ui/core/IconButton";
-import FirstPageIcon from "@material-ui/icons/FirstPage";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import LastPageIcon from "@material-ui/icons/LastPage";
 import TableFooter from "@material-ui/core/TableFooter";
+import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
-import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import BlockIcon from "@material-ui/icons/Block";
-import authHeader from "../../../services/auth-header.js";
+import TableRow from "@material-ui/core/TableRow";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 // Material UI Icon
-
 // Components
-
 // Service
 import AuthService from "../../../services/auth.service";
-import { Button, Checkbox, FormControlLabel, Grid, Switch } from "@material-ui/core";
-import TablePaginationActions from "../../../components/TablePaginationActions"
-import UserRow from "../PlayerManager/components/UserRow"
+import constant from "../../../Utils";
+import TablePaginationActions from "../../../components/TablePaginationActions";
+import StaffRow from "./components/StaffRow";
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -51,47 +35,27 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(6),
     maxWidth: "1400px",
   },
+  search: {
+    "& > *": {
+      margin: theme.spacing(1),
+      width: "25ch",
+    },
+  },
 }));
-const rows = [
-  createData("Frozen yoghurt", "159", "aaa", "bbb", true, true),
-  createData("Ice cream sandwich", "237", "aaa", "bbb", false, false),
-  createData("Eclair", "262", "aaa", "bbb", false, false),
-  createData("Cupcake", "305", "aaa", "bbb", true, false),
-  createData("Gingerbread", "356", "aaa", "bbb", true, false),
-];
-function createData(username, name, email, rank, isActive, isBlocked) {
-  return {
-    username,
-    name,
-    email,
-    rank,
-    isActive,
-    isBlocked,
-    win: 0,
-    lose: 0,
-    draw: 0,
-    history: [
-      { date: "2020-01-05", customerId: "11091700", amount: 3 },
-      { date: "2020-01-02", customerId: "Anonymous", amount: 1 },
-    ],
-  };
-}
-
-const DashBoard = (props) => {
+const StaffManager = (props) => {
   const history = useHistory();
   if (!AuthService.getCurrentUser()) {
     history.push("/logIn");
   }
   const classes = useStyles();
-  const [playerData, setPlayerData] = React.useState([]);
+  const [allStaffData, setAllStaffData] = React.useState([]);
+  const [staffData, setStaffData] = React.useState([]);
   const user = AuthService.getCurrentUser();
   const { row } = props;
   const [open, setOpen] = React.useState(false);
+  const [searchText, setSearchText] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  let emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, playerData.length - page * rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -100,6 +64,25 @@ const DashBoard = (props) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+  const onChangeSearch = (e) => {
+    setSearchText(e.target.value);
+    if (e.target.value == "") {
+      setStaffData(allStaffData);
+      return;
+    }
+    const value = e.target.value.toLowerCase().trim();
+    let data = allStaffData.filter(
+      (n) =>
+        n.name.toLowerCase().includes(value) ||
+        n.username.toLowerCase().includes(value) ||
+        n.email.toLowerCase().includes(value) ||
+        n.created_at.toString().toLowerCase().includes(value) ||
+        (value.startsWith("block") && n.isBlocked) ||
+        (value.startsWith("verif") && n.isActive) ||
+        n.user_type.toLowerCase().includes(value)
+    );
+    setStaffData(data);
   };
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token"));
@@ -110,16 +93,13 @@ const DashBoard = (props) => {
         Authorization: "Bearer " + token,
       },
     };
-    fetch(constant.api + constant.userPath, requestOptions)
+    fetch(constant.api + constant.adminPath + constant.userPath, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
         if (result.success === true) {
-          emptyRows =
-            rowsPerPage -
-            Math.min(rowsPerPage, result.users.length - page * rowsPerPage);
-          setPlayerData(result.users);
-          console.log(playerData);
+          setAllStaffData(result.users);
+          setStaffData(result.users);
         }
       })
       .catch((error) => {
@@ -134,7 +114,19 @@ const DashBoard = (props) => {
       <Container className={classes.container} maxWidth="md">
         <Grid container justify="center">
           <Grid item>
-            <h1 style={{ marginBottom: 20 }}>Player Management</h1>
+            <h1 style={{ marginBottom: 20 }}>Staff Management</h1>
+          </Grid>
+        </Grid>
+        <Grid container justify="flex-end">
+          <Grid item>
+            <form className={classes.search} noValidate autoComplete="off">
+              <TextField
+                id="standard-basic"
+                label="Search"
+                value={searchText}
+                onChange={onChangeSearch}
+              />
+            </form>
           </Grid>
         </Grid>
         <TableContainer component={Paper}>
@@ -142,18 +134,19 @@ const DashBoard = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell />
-                <TableCell>Name</TableCell>
+                <TableCell align="left">Name</TableCell>
                 <TableCell align="right">Username</TableCell>
                 <TableCell align="right">Email</TableCell>
-                <TableCell align="right">Active</TableCell>
-                <TableCell align="right">Blocked</TableCell>
+                <TableCell align="right">Since</TableCell>
+                <TableCell align="center">Staff Type</TableCell>
+                <TableCell align="center">Blocked</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {playerData
+              {staffData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
-                  <UserRow key={row.name} row={row} />
+                  <StaffRow key={row.name} row={row} />
                 ))}
             </TableBody>
             <TableFooter>
@@ -161,7 +154,7 @@ const DashBoard = (props) => {
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 15, { label: "All", value: -1 }]}
                   colSpan={3}
-                  count={playerData.length}
+                  count={staffData.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{
@@ -181,4 +174,4 @@ const DashBoard = (props) => {
   );
 };
 
-export default DashBoard;
+export default StaffManager;
