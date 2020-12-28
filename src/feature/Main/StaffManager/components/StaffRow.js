@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: deepOrange[500],
   },
 }));
-function UserRow(props) {
+function StaffRow(props) {
   const [row, setRow] = useState(props.row);
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
@@ -223,7 +223,8 @@ function UserRow(props) {
                         disabled={
                           row._id == currentUser._id ||
                           row.username == "admin" ||
-                          (currentUser.username != "admin" && row.user_type == "ADMIN")
+                          (currentUser.username != "admin" &&
+                            row.user_type == "ADMIN")
                             ? true
                             : false
                         }
@@ -295,7 +296,7 @@ function UserRow(props) {
   );
 }
 
-UserRow.propTypes = {
+StaffRow.propTypes = {
   row: PropTypes.shape({
     username: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -309,4 +310,4 @@ UserRow.propTypes = {
   }).isRequired,
 };
 
-export default UserRow;
+export default StaffRow;

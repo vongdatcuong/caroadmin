@@ -19,7 +19,7 @@ import { useHistory } from "react-router-dom";
 import AuthService from "../../../services/auth.service";
 import constant from "../../../Utils";
 import TablePaginationActions from "../../../components/TablePaginationActions";
-import UserRow from "./components/UserRow";
+import StaffRow from "./components/GameRow";
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -42,21 +42,20 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const PlayerManager = (props) => {
+const GameManager = (props) => {
   const history = useHistory();
   if (!AuthService.getCurrentUser()) {
     history.push("/logIn");
   }
   const classes = useStyles();
-  const [allPlayerData, setAllPlayerData] = React.useState([]);
-  const [playerData, setPlayerData] = React.useState([]);
-  const [searchText, setSearchText] = React.useState('');
+  const [allGameData, setAllGameData] = React.useState([]);
+  const [gameData, setGameData] = React.useState([]);
   const user = AuthService.getCurrentUser();
   const { row } = props;
   const [open, setOpen] = React.useState(false);
+  const [searchText, setSearchText] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -68,22 +67,23 @@ const PlayerManager = (props) => {
   };
   const onChangeSearch = (e) => {
     setSearchText(e.target.value);
-    if (e.target.value == '') {
-      setPlayerData(allPlayerData);
+    if (e.target.value == "") {
+      setGameData(allGameData);
       return;
     }
     const value = e.target.value.toLowerCase().trim();
-    let data = allPlayerData.filter(
+    /*let data = allGameData.filter(
       (n) =>
         n.name.toLowerCase().includes(value) ||
         n.username.toLowerCase().includes(value) ||
         n.email.toLowerCase().includes(value) ||
         n.created_at.toString().toLowerCase().includes(value) ||
         (value.startsWith("block") && n.isBlocked) ||
-        (value.startsWith("verif") && n.isActive)
+        (value.startsWith("verif") && n.isActive) ||
+        n.user_type.toLowerCase().includes(value)
     );
-    setPlayerData(data);
-  }
+    setGameData(data);*/
+  };
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token"));
     const requestOptions = {
@@ -93,17 +93,19 @@ const PlayerManager = (props) => {
         Authorization: "Bearer " + token,
       },
     };
-    fetch(constant.api + constant.userPath, requestOptions)
+    console.log(constant.api + constant.gamePath);
+    fetch(constant.api + constant.gamePath, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        if (result.success === true) {
-          setAllPlayerData(result.users);
-          setPlayerData(result.users);
+        if (result.data) {
+          setAllGameData(result.data);
+          setGameData(result.data);
         }
       })
       .catch((error) => {
         if (error) {
+          console.log(error);
           console.log("error");
         }
       });
@@ -114,7 +116,7 @@ const PlayerManager = (props) => {
       <Container className={classes.container} maxWidth="md">
         <Grid container justify="center">
           <Grid item>
-            <h1 style={{ marginBottom: 20 }}>Player Management</h1>
+            <h1 style={{ marginBottom: 20 }}>Staff Management</h1>
           </Grid>
         </Grid>
         <Grid container justify="flex-end">
@@ -134,19 +136,19 @@ const PlayerManager = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell />
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="right">Username</TableCell>
-                <TableCell align="right">Email</TableCell>
-                <TableCell align="right">Since</TableCell>
-                <TableCell align="center">Verified</TableCell>
-                <TableCell align="center">Blocked</TableCell>
+                <TableCell align="left">Player X</TableCell>
+                <TableCell align="left">Player O</TableCell>
+                <TableCell align="center">Winner</TableCell>
+                <TableCell align="right">Total Time</TableCell>
+                <TableCell align="center">Trophy</TableCell>
+                <TableCell align="center">At</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {playerData
+              {gameData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
-                  <UserRow key={row._id} row={row} />
+                  <StaffRow key={row._id} row={row} />
                 ))}
             </TableBody>
             <TableFooter>
@@ -154,7 +156,7 @@ const PlayerManager = (props) => {
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 15, { label: "All", value: -1 }]}
                   colSpan={7}
-                  count={playerData.length}
+                  count={gameData.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{
@@ -174,4 +176,4 @@ const PlayerManager = (props) => {
   );
 };
 
-export default PlayerManager;
+export default GameManager;

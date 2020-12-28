@@ -29,6 +29,7 @@ import LeftDrawer from "../Drawer";
 import Main from "../Main";
 import PlayerManager from "../../../feature/Main/PlayerManager";
 import StaffManager from "../../../feature/Main/StaffManager"
+import GameManager from "../../../feature/Main/GameManager";
 //const hashHistory = createHashHistory({ basename: process.env.PUBLIC_URL });
 
 function App() {
@@ -60,10 +61,9 @@ function App() {
               <Route path="/staff">
                 <Main content={<StaffManager />} />
               </Route>
-              {/*<Route path="/game">
-                <Header />
-                <Game />
-              </Route>*/}
+              <Route path="/game">
+                <Main content={<GameManager />} />
+              </Route>
               <Route path="/account-validation/:token">
                 <Header />
                 <AccountValidation />

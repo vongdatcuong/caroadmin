@@ -146,14 +146,14 @@ const StaffManager = (props) => {
               {staffData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
-                  <StaffRow key={row.name} row={row} />
+                  <StaffRow key={row._id} row={row} />
                 ))}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 15, { label: "All", value: -1 }]}
-                  colSpan={3}
+                  colSpan={7}
                   count={staffData.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
