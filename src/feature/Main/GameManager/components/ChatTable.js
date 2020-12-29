@@ -10,6 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import ChatTableHeader from "./ChatTableHeader";
 import ChatTableToolbar from "./ChatTableToolbar";
+import constant from "../../../../Utils";
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -68,7 +69,6 @@ export default function ChatTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [rows, setRows] = React.useState(props.chats ? props.chats : []);
-  console.log(props.chats);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -114,11 +114,42 @@ export default function ChatTable(props) {
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
+  const handleDeleteChat = () => {
+    let newChatList = rows.filter((n) => !selected.includes(n._id));
+    const token = JSON.parse(localStorage.getItem("token"));
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({ list_chat_id: selected }),
+    };
+    console.log(constant.api + constant.chatPath);
+    console.log(requestOptions);
+    fetch(constant.api + constant.chatPath, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.status == "success") {
+          setRows(newChatList);
+          setSelected([]);
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          console.log(error);
+          console.log("error");
+        }
+      });
+  };
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <ChatTableToolbar numSelected={selected.length} />
+        <ChatTableToolbar
+          numSelected={selected.length}
+          onDeleteChat={handleDeleteChat}
+        />
         <TableContainer>
           <Table
             className={classes.table}

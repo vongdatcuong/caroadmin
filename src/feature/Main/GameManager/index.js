@@ -19,7 +19,7 @@ import { useHistory } from "react-router-dom";
 import AuthService from "../../../services/auth.service";
 import constant from "../../../Utils";
 import TablePaginationActions from "../../../components/TablePaginationActions";
-import StaffRow from "./components/GameRow";
+import GameRow from "./components/GameRow";
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -148,7 +148,7 @@ const GameManager = (props) => {
               {gameData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
-                  <StaffRow key={row._id} row={row} />
+                  <GameRow key={row._id} row={row} />
                 ))}
             </TableBody>
             <TableFooter>

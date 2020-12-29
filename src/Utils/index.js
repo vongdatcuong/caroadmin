@@ -5,6 +5,7 @@ const api = `${SERVER}/api`;
 const adminPath = "/admin";
 const userPath = "/user";
 const gamePath = "/game";
+const chatPath = "/chat";
 const logInPath = "/login";
 const signUpPath = "/signup";
 const emailValidation = "/emailValidation";
@@ -24,6 +25,7 @@ export default {
   userPath,
   logInPath,
   gamePath,
+  chatPath,
   signUpPath,
   emailValidation,
   sendEmailResetPassword,

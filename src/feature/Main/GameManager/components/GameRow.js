@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Button,
   Chip,
   FormControlLabel,
@@ -11,7 +12,7 @@ import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 // Material UI Core
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -45,6 +46,13 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(6),
     maxWidth: "1400px",
+  },
+  smallAvatar: {
+    width: 22,
+    height: 22,
+    border: `2px solid ${theme.palette.background.paper}`,
+    background: 'lightgray',
+    borderRadius: 11,
   },
   avatar: {
     display: "flex",
@@ -98,13 +106,114 @@ function GameRow(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
-                Information
-              </Typography>
-
-              <Grid container justify="center">
+              <Grid container justify="center" direction="column">
                 <Grid item>
-                  <ChatTable chats={row.chats} />
+                  <Grid container justify="space-around" direction="row">
+                    <Grid item>
+                      <Grid
+                        container
+                        justify="center"
+                        direction="column"
+                        alignItems="center"
+                      >
+                        <Grid item>
+                          <Badge
+                            overlap="circle"
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right",
+                            }}
+                            badgeContent={
+                              <CloseIcon
+                                color="secondary"
+                                className={classes.smallAvatar}
+                              />
+                            }
+                          >
+                            {row.player1.avatar ? (
+                              <Avatar
+                                alt={row.player1.name}
+                                src={row.player1.avatar}
+                                className={classes.avatar}
+                              />
+                            ) : (
+                              <Avatar
+                                className={classes.orange}
+                                className={classes.avatar}
+                              >
+                                {row.player1.name
+                                  ? row.player1.name[0]
+                                  : row.player1.username[0]}
+                              </Avatar>
+                            )}
+                          </Badge>
+                        </Grid>
+                        <Grid item>{row.player1.name}</Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item>
+                      <Grid
+                        container
+                        justify="center"
+                        direction="column"
+                        alignItems="center"
+                      >
+                        <Grid item>
+                          <Badge
+                            overlap="circle"
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right",
+                            }}
+                            badgeContent={
+                              <RadioButtonUncheckedIcon
+                                color="primary"
+                                className={classes.smallAvatar}
+                              />
+                            }
+                          >
+                            {row.player2.avatar ? (
+                              <Avatar
+                                alt={row.player2.name}
+                                src={row.player2.avatar}
+                                className={classes.avatar}
+                              />
+                            ) : (
+                              <Avatar
+                                className={classes.orange}
+                                className={classes.avatar}
+                              >
+                                {row.player2.name
+                                  ? row.player2.name[0]
+                                  : row.player2.username[0]}
+                              </Avatar>
+                            )}
+                          </Badge>
+                        </Grid>
+                        <Grid item>{row.player2.name}</Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Grid container justify="center" direction="row">
+                    <Grid item>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        href="#contained-buttons"
+                      >
+                        View
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Grid container justify="center" direction="row">
+                    <Grid item>
+                      <ChatTable chats={row.chats} />
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Box>
