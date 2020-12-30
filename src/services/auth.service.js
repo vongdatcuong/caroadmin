@@ -38,69 +38,28 @@ class AuthService {
       });
   }
 
-  logInWithGoogle(googleID) {
+  googleLogin = (googleresponse) => {
     const requestOptions = {
       method: "POST",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        googleID: googleID,
-      }),
+      body: JSON.stringify(googleresponse),
     };
-    return fetch(
-      constant.api + constant.userPath + constant.logInWithGoogle,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.isSuccess) {
-          localStorage.setItem("user", JSON.stringify(result.user));
-          localStorage.setItem("token", JSON.stringify(result.token));
-          return {
-            isSuccess: true,
-            user: result.user,
-          };
-        } else {
-          return {
-            isSuccess: false,
-            message: result.message,
-          };
-        }
-      });
-  }
-
-  logInWithFacebook(facebookID) {
+    return fetch(constant.api + "/admin/user/googlelogin", requestOptions);
+  };
+  facebookLogin = (fbresponse) => {
     const requestOptions = {
       method: "POST",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        facebookID: facebookID,
-      }),
+      body: JSON.stringify(fbresponse),
     };
-    return fetch(
-      constant.api + constant.userPath + constant.logInWithFacebook,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.isSuccess) {
-          localStorage.setItem("user", JSON.stringify(result.user));
-          localStorage.setItem("token", JSON.stringify(result.token));
-          return {
-            isSuccess: true,
-            user: result.user,
-          };
-        } else {
-          return {
-            isSuccess: false,
-            message: result.message,
-          };
-        }
-      });
-  }
+    return fetch(constant.api + "/admin/user/facebooklogin", requestOptions);
+  };
 
   logOut() {
     localStorage.removeItem("user");

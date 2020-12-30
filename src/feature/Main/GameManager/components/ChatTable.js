@@ -199,7 +199,7 @@ export default function ChatTable(props) {
                       </TableCell>
                       <TableCell align="right">{row.content}</TableCell>
                       <TableCell align="right">
-                        {Math.ceil(row.time / 1000)}
+                        {Math.floor(row.time / 1000)}
                       </TableCell>
                     </TableRow>
                   );

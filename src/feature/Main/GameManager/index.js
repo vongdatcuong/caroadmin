@@ -72,17 +72,18 @@ const GameManager = (props) => {
       return;
     }
     const value = e.target.value.toLowerCase().trim();
-    /*let data = allGameData.filter(
+    let data = allGameData.filter(
       (n) =>
-        n.name.toLowerCase().includes(value) ||
-        n.username.toLowerCase().includes(value) ||
-        n.email.toLowerCase().includes(value) ||
-        n.created_at.toString().toLowerCase().includes(value) ||
-        (value.startsWith("block") && n.isBlocked) ||
-        (value.startsWith("verif") && n.isActive) ||
-        n.user_type.toLowerCase().includes(value)
+        n.winner.toLowerCase().includes(value) ||
+        n.player1.username.toLowerCase().includes(value) ||
+        n.player2.username.toLowerCase().includes(value) ||
+        n.player1.name.toLowerCase().includes(value) ||
+        n.player2.name.toLowerCase().includes(value) ||
+        n.trophyTransferred == parseInt(value) ||
+        n.created_at.toString().includes(value) ||
+        Math.floor(n.totalTime / 1000) == parseInt(value)
     );
-    setGameData(data);*/
+    setGameData(data);
   };
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token"));
@@ -116,7 +117,7 @@ const GameManager = (props) => {
       <Container className={classes.container} maxWidth="md">
         <Grid container justify="center">
           <Grid item>
-            <h1 style={{ marginBottom: 20 }}>Staff Management</h1>
+            <h1 style={{ marginBottom: 20 }}>Game Management</h1>
           </Grid>
         </Grid>
         <Grid container justify="flex-end">
