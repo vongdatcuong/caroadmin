@@ -8,6 +8,7 @@ const gamePath = "/game";
 const chatPath = "/chat";
 const logInPath = "/login";
 const signUpPath = "/signup";
+const addStaffPath = "/addstaff";
 const emailValidation = "/emailValidation";
 const sendEmailResetPassword = "/sendEmailResetPassword";
 const resetPassword = "/resetPassword";
@@ -30,6 +31,7 @@ export default {
   emailValidation,
   sendEmailResetPassword,
   resetPassword,
+  addStaffPath,
   //
   queryParams,
 };

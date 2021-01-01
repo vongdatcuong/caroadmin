@@ -221,6 +221,7 @@ function StaffRow(props) {
                         checked={isAdmin}
                         onChange={onChangeIsAdmin}
                         disabled={
+                          currentUser.user_type != "ADMIN" ||
                           row._id == currentUser._id ||
                           row.username == "admin" ||
                           (currentUser.username != "admin" &&
@@ -238,7 +239,19 @@ function StaffRow(props) {
                   <FormControlLabel
                     style={{ width: 140, marginRight: 10, marginLeft: 10 }}
                     control={
-                      <Switch checked={isActive} onChange={onChangeIsActive} />
+                      <Switch
+                        checked={isActive}
+                        onChange={onChangeIsActive}
+                        disabled={
+                          currentUser.user_type != "ADMIN" ||
+                          row._id == currentUser._id ||
+                          row.username == "admin" ||
+                          (currentUser.username != "admin" &&
+                            row.user_type == "ADMIN")
+                            ? true
+                            : false
+                        }
+                      />
                     }
                     label="Is Active"
                     labelPlacement="end"
@@ -252,6 +265,15 @@ function StaffRow(props) {
                         title="Is Blocked"
                         checked={isBlocked}
                         onChange={onChangeIsBlocked}
+                        disabled={
+                          currentUser.user_type != "ADMIN" ||
+                          row._id == currentUser._id ||
+                          row.username == "admin" ||
+                          (currentUser.username != "admin" &&
+                            row.user_type == "ADMIN")
+                            ? true
+                            : false
+                        }
                       />
                     }
                     label="Is Blocked"
@@ -259,7 +281,7 @@ function StaffRow(props) {
                   />
                 </Grid>
               </Grid>
-              <Grid
+              {currentUser.user_type == "ADMIN" ? <Grid
                 container
                 style={{ marginTop: 10 }}
                 direction="row"
@@ -287,7 +309,7 @@ function StaffRow(props) {
                     Reset
                   </Button>
                 </Grid>
-              </Grid>
+              </Grid> : null}
             </Box>
           </Collapse>
         </TableCell>

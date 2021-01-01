@@ -1,4 +1,4 @@
-import { Grid, TextField } from "@material-ui/core";
+import { Button, Grid, TextField } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 // Material UI Core
@@ -14,12 +14,15 @@ import TableRow from "@material-ui/core/TableRow";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 // Material UI Icon
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 // Components
 // Service
 import AuthService from "../../../services/auth.service";
 import constant from "../../../Utils";
 import TablePaginationActions from "../../../components/TablePaginationActions";
 import StaffRow from "./components/StaffRow";
+import FullScreenDialog from "../../../components/FullScreenDialog";
+import CreateStaffDialog from "./components/CreateStaffDialog";
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -41,6 +44,8 @@ const useStyles = makeStyles((theme) => ({
       width: "25ch",
     },
   },
+  button: {
+  },
 }));
 const StaffManager = (props) => {
   const history = useHistory();
@@ -56,7 +61,40 @@ const StaffManager = (props) => {
   const [searchText, setSearchText] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const getStaff = () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    };
+    fetch(constant.api + constant.adminPath + constant.userPath, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success === true) {
+          setAllStaffData(result.users);
+          setStaffData(result.users);
+          setSearchText("");
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          console.log("error");
+        }
+      });
+  }
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  }
+  const handleSave = () => {
+    //reload
+    setOpenDialog(false);
+    getStaff();
+  }
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -84,29 +122,9 @@ const StaffManager = (props) => {
     );
     setStaffData(data);
   };
+  
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    };
-    fetch(constant.api + constant.adminPath + constant.userPath, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        if (result.success === true) {
-          setAllStaffData(result.users);
-          setStaffData(result.users);
-        }
-      })
-      .catch((error) => {
-        if (error) {
-          console.log("error");
-        }
-      });
+    getStaff();
   }, []);
 
   return (
@@ -117,7 +135,26 @@ const StaffManager = (props) => {
             <h1 style={{ marginBottom: 20 }}>Staff Management</h1>
           </Grid>
         </Grid>
-        <Grid container justify="flex-end">
+        <Grid container justify="space-between" alignItems="center">
+          <Grid item>
+            {user.user_type.toLowerCase() == "admin" ? (
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                endIcon={<PersonAddIcon />}
+                onClick={() => setOpenDialog(true)}
+              >
+                Add Staff
+              </Button>
+            ) : null}
+            <CreateStaffDialog
+              title="CREATE NEW STAFF"
+              isOpen={openDialog}
+              onClose={handleCloseDialog}
+              onSave={handleSave}
+            />
+          </Grid>
           <Grid item>
             <form className={classes.search} noValidate autoComplete="off">
               <TextField

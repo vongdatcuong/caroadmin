@@ -66,22 +66,29 @@ class AuthService {
     localStorage.removeItem("token");
   }
 
-  signUp(username, password, name, email) {
+  signUp(username, password, name, email, isAdmin, isActive) {
+    const token = JSON.parse(localStorage.getItem("token"));
     const data = {
       username: username,
       password: password,
       name: name,
       email: email,
+      user_type: isAdmin ? "ADMIN" : "STAFF",
+      isActive: isActive,
     };
+    console.log(data);
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+     },
       body: JSON.stringify({
         data: Buffer.from(JSON.stringify(data)).toString("base64"),
       }),
     };
     return fetch(
-      constant.api + constant.userPath + constant.signUpPath,
+      constant.api + constant.adminPath + constant.userPath,
       requestOptions
     )
       .then((response) => response.json())
