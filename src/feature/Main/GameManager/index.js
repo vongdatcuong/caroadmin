@@ -12,7 +12,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 // Material UI Icon
 // Components
 // Service
@@ -20,6 +20,7 @@ import AuthService from "../../../services/auth.service";
 import constant from "../../../Utils";
 import TablePaginationActions from "../../../components/TablePaginationActions";
 import GameRow from "./components/GameRow";
+import Utils from "../../../Utils";
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -56,7 +57,8 @@ const GameManager = (props) => {
   const [searchText, setSearchText] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+  const [title, setTitle] = React.useState("Game Management");
+  const { userid } = useParams();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -85,7 +87,7 @@ const GameManager = (props) => {
     );
     setGameData(data);
   };
-  useEffect(() => {
+  const fetchAllGame = () => {
     const token = JSON.parse(localStorage.getItem("token"));
     const requestOptions = {
       method: "GET",
@@ -94,11 +96,9 @@ const GameManager = (props) => {
         Authorization: "Bearer " + token,
       },
     };
-    console.log(constant.api + constant.gamePath);
     fetch(constant.api + constant.gamePath, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.data) {
           setAllGameData(result.data);
           setGameData(result.data);
@@ -110,6 +110,42 @@ const GameManager = (props) => {
           console.log("error");
         }
       });
+  };
+  const fetchUserGame = (user_id) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    };
+    const url = constant.api + constant.userPath + "/" + user_id;
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.data) {
+          setAllGameData(result.data.games);
+          setGameData(result.data.games);
+          setTitle(`Games of ${result.data.name} (${result.data.username})`);
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          console.log(error);
+          console.log("error");
+        }
+      });
+  }
+  useEffect(() => {
+    setTitle("Game Management");
+    if (userid) {
+      fetchUserGame(userid);
+    }
+    else {
+      fetchAllGame();
+    }
   }, []);
 
   return (
@@ -117,7 +153,7 @@ const GameManager = (props) => {
       <Container className={classes.container} maxWidth="md">
         <Grid container justify="center">
           <Grid item>
-            <h1 style={{ marginBottom: 20 }}>Game Management</h1>
+            <h1 style={{ marginBottom: 20 }}>{title}</h1>
           </Grid>
         </Grid>
         <Grid container justify="flex-end">

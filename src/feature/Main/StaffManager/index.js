@@ -74,7 +74,6 @@ const StaffManager = (props) => {
     fetch(constant.api + constant.adminPath + constant.userPath, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.success === true) {
           setAllStaffData(result.users);
           setStaffData(result.users);

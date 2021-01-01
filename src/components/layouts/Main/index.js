@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -14,6 +14,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Header from "../Header";
 import LeftDrawer from "../Drawer"
+import { useParams } from "react-router-dom";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -41,13 +42,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Main(props) {
   const classes = useStyles();
-
   return (
     <div className={classes.root}>
       <CssBaseline />
       <LeftDrawer />
       <Header />
-      <main className={classes.content}>{props.content}</main>
+      <main className={classes.content}>{props.children}</main>
     </div>
   );
 }

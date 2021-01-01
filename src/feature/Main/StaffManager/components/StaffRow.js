@@ -10,6 +10,7 @@ import constant from "../../../../Utils";
 import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
+import GamepadIcon from "@material-ui/icons/Gamepad";
 // Material UI Core
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -28,6 +29,7 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { deepOrange } from "@material-ui/core/colors";
 import authService from "../../../../services/auth.service";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -66,6 +68,7 @@ function StaffRow(props) {
   const [isAdmin, setIsAdmin] = useState(
     props.row.user_type == "ADMIN" ? true : false
   );
+  const history = useHistory();
   const currentUser = authService.getCurrentUser();
   const onChangeIsActive = (e) => {
     setIsActive(!isActive);
@@ -81,6 +84,10 @@ function StaffRow(props) {
     setIsBlocked(row.isBlocked);
     setIsAdmin(row.user_type == "ADMIN" ? true : false);
   };
+  const onViewGame = () => {
+    const url = `/user/${row._id}`;
+    history.push(url);
+  }
   const onSave = () => {
     const token = JSON.parse(localStorage.getItem("token"));
     const userUpdateData = {
@@ -88,7 +95,6 @@ function StaffRow(props) {
       isBlocked: isBlocked,
       isAdmin: isAdmin ? "ADMIN" : "STAFF",
     };
-    console.log(userUpdateData);
     const requestOptions = {
       method: "PUT",
       headers: {
@@ -162,9 +168,9 @@ function StaffRow(props) {
               </Typography>
               <Grid
                 container
-                direction="row"
+                direction="column"
                 justify="center"
-                alignItems="flex-start"
+                alignItems="center"
               >
                 <Grid item>
                   {row.avatar ? (
@@ -181,6 +187,18 @@ function StaffRow(props) {
                       {row.name ? row.name[0] : row.username[0]}
                     </Avatar>
                   )}
+                </Grid>
+                <Grid item>
+                  <Button
+                    title="Save"
+                    variant="contained"
+                    color="primary"
+                    startIcon={<GamepadIcon color="white" />}
+                    style={{ margin: 10 }}
+                    onClick={onViewGame}
+                  >
+                    View Games
+                  </Button>
                 </Grid>
               </Grid>
 
@@ -212,7 +230,7 @@ function StaffRow(props) {
                 Account
               </Typography>
               <Grid container direction="row" justify="center">
-                <Grid item alignItems="center" direction="row">
+                <Grid item>
                   <FormControlLabel
                     style={{ width: 140, marginRight: 10, marginLeft: 10 }}
                     control={
@@ -235,7 +253,7 @@ function StaffRow(props) {
                     labelPlacement="end"
                   />
                 </Grid>
-                <Grid item alignItems="center" direction="row">
+                <Grid item>
                   <FormControlLabel
                     style={{ width: 140, marginRight: 10, marginLeft: 10 }}
                     control={
@@ -257,7 +275,7 @@ function StaffRow(props) {
                     labelPlacement="end"
                   />
                 </Grid>
-                <Grid item alignItems="center" direction="row">
+                <Grid item>
                   <FormControlLabel
                     style={{ width: 140, marginLeft: 10 }}
                     control={
@@ -281,35 +299,37 @@ function StaffRow(props) {
                   />
                 </Grid>
               </Grid>
-              {currentUser.user_type == "ADMIN" ? <Grid
-                container
-                style={{ marginTop: 10 }}
-                direction="row"
-                justify="center"
-              >
-                <Grid item>
-                  <Button
-                    title="Save"
-                    variant="contained"
-                    color="primary"
-                    style={{ width: 140, marginRight: 10 }}
-                    onClick={onSave}
-                  >
-                    Save
-                  </Button>
+              {currentUser.user_type == "ADMIN" ? (
+                <Grid
+                  container
+                  style={{ marginTop: 10 }}
+                  direction="row"
+                  justify="center"
+                >
+                  <Grid item>
+                    <Button
+                      title="Save"
+                      variant="contained"
+                      color="primary"
+                      style={{ width: 140, marginRight: 10 }}
+                      onClick={onSave}
+                    >
+                      Save
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      title="Save"
+                      variant="contained"
+                      color="secondary"
+                      style={{ width: 140 }}
+                      onClick={onReset}
+                    >
+                      Reset
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <Button
-                    title="Save"
-                    variant="contained"
-                    color="secondary"
-                    style={{ width: 140 }}
-                    onClick={onReset}
-                  >
-                    Reset
-                  </Button>
-                </Grid>
-              </Grid> : null}
+              ) : null}
             </Box>
           </Collapse>
         </TableCell>

@@ -28,7 +28,7 @@ import ForgetPassword from "../../../feature/Authentication/ForgetPassword";
 import LeftDrawer from "../Drawer";
 import Main from "../Main";
 import PlayerManager from "../../../feature/Main/PlayerManager";
-import StaffManager from "../../../feature/Main/StaffManager"
+import StaffManager from "../../../feature/Main/StaffManager";
 import GameManager from "../../../feature/Main/GameManager";
 //const hashHistory = createHashHistory({ basename: process.env.PUBLIC_URL });
 
@@ -56,13 +56,24 @@ function App() {
                 <Profile />
               </Route>
               <Route path="/player">
-                <Main content={<PlayerManager />} />
+                <Main>
+                  <PlayerManager />
+                </Main>
               </Route>
               <Route path="/staff">
-                <Main content={<StaffManager />} />
+                <Main>
+                  <StaffManager />
+                </Main>
+              </Route>
+              <Route path="/user/:userid">
+                <Main>
+                  <GameManager/>
+                </Main>
               </Route>
               <Route path="/game">
-                <Main content={<GameManager />} />
+                <Main>
+                  <GameManager />
+                </Main>
               </Route>
               <Route path="/account-validation/:token">
                 <Header />

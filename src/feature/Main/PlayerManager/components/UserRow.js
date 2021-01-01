@@ -20,12 +20,14 @@ import Typography from "@material-ui/core/Typography";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import GamepadIcon from "@material-ui/icons/Gamepad";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import BlockIcon from "@material-ui/icons/Block";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { deepOrange } from "@material-ui/core/colors";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -61,7 +63,7 @@ function UserRow(props) {
   const classes = useStyles();
   const [isActive, setIsActive] = useState(props.row.isActive);
   const [isBlocked, setIsBlocked] = useState(props.row.isBlocked);
-
+  const history = useHistory();
   const onChangeIsActive = (e) => {
     setIsActive(!isActive);
   };
@@ -71,6 +73,10 @@ function UserRow(props) {
   const onReset = () => {
     setIsActive(row.isActive);
     setIsBlocked(row.isBlocked);
+  };
+  const onViewGame = () => {
+    const url = `/user/${row._id}`;
+    history.push(url);
   };
   const onSave = () => {
     const token = JSON.parse(localStorage.getItem("token"));
@@ -146,9 +152,9 @@ function UserRow(props) {
               </Typography>
               <Grid
                 container
-                direction="row"
+                direction="column"
                 justify="center"
-                alignItems="flex-start"
+                alignItems="center"
               >
                 <Grid item>
                   {row.avatar ? (
@@ -165,6 +171,18 @@ function UserRow(props) {
                       {row.name ? row.name[0] : row.username[0]}
                     </Avatar>
                   )}
+                </Grid>
+                <Grid item>
+                  <Button
+                    title="Save"
+                    variant="contained"
+                    color="primary"
+                    startIcon={<GamepadIcon color="white" />}
+                    style={{ margin: 10 }}
+                    onClick={onViewGame}
+                  >
+                    View Games
+                  </Button>
                 </Grid>
               </Grid>
 

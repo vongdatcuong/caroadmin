@@ -96,7 +96,6 @@ const PlayerManager = (props) => {
     fetch(constant.api + constant.userPath, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.success === true) {
           setAllPlayerData(result.users);
           setPlayerData(result.users);

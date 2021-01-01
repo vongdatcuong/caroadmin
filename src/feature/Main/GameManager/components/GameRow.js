@@ -226,8 +226,8 @@ function GameRow(props) {
 
 GameRow.propTypes = {
   row: PropTypes.shape({
-    player1: PropTypes.string.isRequired,
-    player2: PropTypes.string.isRequired,
+    player1: PropTypes.object.isRequired,
+    player2: PropTypes.object.isRequired,
     winner: PropTypes.string.isRequired,
     totalTime: PropTypes.number.isRequired,
     trophyTransferred: PropTypes.number.isRequired,
