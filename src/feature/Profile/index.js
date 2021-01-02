@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { Avatar } from "@material-ui/core";
+import PublishIcon from "@material-ui/icons/Publish";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
@@ -27,7 +29,8 @@ import authHeader from "../../services/auth-header.js";
 import AuthService from "../../services/auth.service";
 import constant from "../../Utils/index";
 import { loadingStore } from "../../context/loading-context";
-
+import { deepOrange } from "@material-ui/core/colors";
+import ImgurApiService from "../../services/api/imgur-api";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(0),
@@ -67,6 +70,19 @@ const useStyles = makeStyles((theme) => ({
     verticalAlign: "middle",
     cursor: "pointer",
   },
+  avatarImage: {
+    display: "flex",
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+    width: theme.spacing(10),
+    height: theme.spacing(10),
+    margin: 20,
+  },
+  orange: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
+  },
 }));
 
 export default function SignUp(props) {
@@ -80,10 +96,11 @@ export default function SignUp(props) {
   const nameRef = useRef();
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
-  const [gender, setGender] = useState(user.gender);
+  const [username, setUsername] = useState(user.username);
   const [isSuccess, setIsSuccess] = useState(true);
   const [errorMsg, setErrMsg] = useState("");
-  const {loadingState, dispatchLoading} = useContext(loadingStore);
+  const [avatar, setAvatar] = useState(user.avatar);
+  const { loadingState, dispatchLoading } = useContext(loadingStore);
 
   const toggleUpdate = (evt) => {
     setDisabled(!disabled);
@@ -99,14 +116,33 @@ export default function SignUp(props) {
   const handleEmailChange = (evt) => {
     setEmail(evt.target.value);
   };
-
-  const handleGenderChange = (evt) => {
-    setGender(evt.target.value);
+  const handleUploadImage = async (evt) => {
+    const file = evt.target.files[0];
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = async function (e) {
+        const base64Value = reader.result.replace("data:image/png;base64,", "");
+        try {
+          const uploadRes = await ImgurApiService.uploadImage(base64Value);
+          const uploadResult = await uploadRes.json();
+          if (
+            uploadResult.success &&
+            uploadResult.data &&
+            uploadResult.data.link
+          ) {
+            setAvatar(uploadResult.data.link);
+            console.log(uploadResult.data.link);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+    }
   };
-
   const handleUpdate = (event) => {
     event.preventDefault();
-    if (!name || !email || !gender) {
+    if (!name || !email) {
       return;
     }
     dispatchLoading({ type: "Set-Loading", isLoading: true });
@@ -119,13 +155,17 @@ export default function SignUp(props) {
         authHeader()
       ),
       body: JSON.stringify({
-        name: name,
-        email: email,
-        gender: gender,
+        data: Buffer.from(
+          JSON.stringify({
+            name: name,
+            email: email,
+            avatar: avatar,
+          })
+        ).toString("base64"),
       }),
     };
     return fetch(
-      constant.api + constant.userPath + constant.updateProfilePath,
+      constant.api + constant.userPath + "/" + user._id,
       requestOptions
     )
       .then((response) => response.json())
@@ -135,11 +175,16 @@ export default function SignUp(props) {
             AuthService.updateCurrentUser({
               name: name,
               email: email,
-              gender: gender,
+              avatar: avatar,
             });
           }
           setIsSuccess(result.isSuccess);
           setErrMsg(result.message);
+          if (result.isEmailSent) {
+            setErrMsg(result.message + "\nPlease Verify your new email");
+          } else {
+            setErrMsg(result.message + "\nVerify email failed to send!");
+          }
           dispatchLoading({ type: "Set-Loading", isLoading: false });
         },
         (error) => {
@@ -151,10 +196,38 @@ export default function SignUp(props) {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" style={{ marginTop: 20 }}>
       <CssBaseline />
       <div className={classes.paper}>
-        <AccountBoxIcon className={classes.avatar}></AccountBoxIcon>
+        {avatar ? (
+          <Avatar alt={name} src={avatar} className={classes.avatarImage} />
+        ) : (
+          <Avatar
+            alt={name}
+            className={classes.orange}
+            className={classes.avatarImage}
+          >
+            {name ? name[0] : username[0]}
+          </Avatar>
+        )}
+        {!disabled ? (
+          <Button
+            variant="contained"
+            component="label"
+            color="secondary"
+            disabled={disabled}
+            className={classes.submit}
+            endIcon={<PublishIcon color="white" />}
+          >
+            Upload Avatar
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={handleUploadImage}
+            />
+          </Button>
+        ) : null}
         <Typography component="h1" variant="h5">
           Your Profile
           <BorderColorIcon
@@ -164,6 +237,22 @@ export default function SignUp(props) {
         </Typography>
         <form className={classes.form} onSubmit={(evt) => handleUpdate(evt)}>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                name="username"
+                variant="outlined"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                autoFocus
+                InputProps={{
+                  className: classes.formControl,
+                }}
+                disabled={true}
+                value={username}
+              />
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 autoComplete="fullName"
@@ -205,31 +294,6 @@ export default function SignUp(props) {
                 onChange={(evt) => handleEmailChange(evt)}
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Gender</FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="gender"
-                  name="gender1"
-                  value={gender}
-                  onChange={handleGenderChange}
-                >
-                  <FormControlLabel
-                    disabled={disabled}
-                    value="Male"
-                    control={<Radio />}
-                    label="Male"
-                  />
-                  <FormControlLabel
-                    disabled={disabled}
-                    value="Female"
-                    control={<Radio />}
-                    label="Female"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
           </Grid>
           <br />
           <FormHelperText
@@ -240,7 +304,6 @@ export default function SignUp(props) {
           >
             {errorMsg}
           </FormHelperText>
-
           <Button
             type="submit"
             fullWidth

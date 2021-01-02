@@ -51,9 +51,9 @@ function App() {
                 <SignUp />
               </Route>*/}
               <Route path="/profile">
-                {/* Header */}
-                <Header />
-                <Profile />
+                <Main>
+                  <Profile />
+                </Main>
               </Route>
               <Route path="/player">
                 <Main>
@@ -67,7 +67,7 @@ function App() {
               </Route>
               <Route path="/user/:userid">
                 <Main>
-                  <GameManager/>
+                  <GameManager />
                 </Main>
               </Route>
               <Route path="/game">
