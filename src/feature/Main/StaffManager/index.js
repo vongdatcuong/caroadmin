@@ -11,8 +11,9 @@ import TableFooter from "@material-ui/core/TableFooter";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import {loadingStore} from "../../../context/loading-context";
 // Material UI Icon
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 // Components
@@ -53,6 +54,7 @@ const StaffManager = (props) => {
     history.push("/logIn");
   }
   const classes = useStyles();
+  const {loadingState, dispatchLoading} = useContext(loadingStore);
   const [allStaffData, setAllStaffData] = React.useState([]);
   const [staffData, setStaffData] = React.useState([]);
   const user = AuthService.getCurrentUser();
@@ -63,6 +65,7 @@ const StaffManager = (props) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [openDialog, setOpenDialog] = React.useState(false);
   const getStaff = () => {
+    dispatchLoading({ type: "Set-Loading", isLoading: true });
     const token = JSON.parse(localStorage.getItem("token"));
     const requestOptions = {
       method: "GET",
@@ -79,11 +82,13 @@ const StaffManager = (props) => {
           setStaffData(result.users);
           setSearchText("");
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       })
       .catch((error) => {
         if (error) {
           console.log("error");
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       });
   }
   const handleCloseDialog = () => {

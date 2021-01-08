@@ -11,8 +11,9 @@ import TableFooter from "@material-ui/core/TableFooter";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import {loadingStore} from "../../../context/loading-context";
 // Material UI Icon
 // Components
 // Service
@@ -49,6 +50,7 @@ const GameManager = (props) => {
     history.push("/logIn");
   }
   const classes = useStyles();
+  const {loadingState, dispatchLoading} = useContext(loadingStore);
   const [allGameData, setAllGameData] = React.useState([]);
   const [gameData, setGameData] = React.useState([]);
   const user = AuthService.getCurrentUser();
@@ -88,6 +90,7 @@ const GameManager = (props) => {
     setGameData(data);
   };
   const fetchAllGame = () => {
+    dispatchLoading({ type: "Set-Loading", isLoading: true });
     const token = JSON.parse(localStorage.getItem("token"));
     const requestOptions = {
       method: "GET",
@@ -103,15 +106,18 @@ const GameManager = (props) => {
           setAllGameData(result.data);
           setGameData(result.data);
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       })
       .catch((error) => {
         if (error) {
           console.log(error);
           console.log("error");
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       });
   };
   const fetchUserGame = (user_id) => {
+    dispatchLoading({ type: "Set-Loading", isLoading: true });
     const token = JSON.parse(localStorage.getItem("token"));
     const requestOptions = {
       method: "GET",
@@ -130,12 +136,14 @@ const GameManager = (props) => {
           setGameData(result.data.games);
           setTitle(`Games of ${result.data.name} (${result.data.username})`);
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       })
       .catch((error) => {
         if (error) {
           console.log(error);
           console.log("error");
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       });
   }
   useEffect(() => {

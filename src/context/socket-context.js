@@ -26,7 +26,7 @@ const SocketStateProvider = ({ children }) => {
         temp.push(action.payload);
         return { ...state, globalChat: temp };
       case "Log-out":
-        return { ...state, initState };
+        return Object.assign({}, initState);
       default:
         throw new Error();
     }

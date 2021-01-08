@@ -25,9 +25,10 @@ import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import BlockIcon from "@material-ui/icons/Block";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { deepOrange } from "@material-ui/core/colors";
 import { useHistory } from "react-router-dom";
+import { loadingStore } from "../../../../context/loading-context";
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -61,6 +62,7 @@ function UserRow(props) {
   const [row, setRow] = useState(props.row);
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
+  const {loadingState, dispatchLoading} = useContext(loadingStore);
   const [isActive, setIsActive] = useState(props.row.isActive);
   const [isBlocked, setIsBlocked] = useState(props.row.isBlocked);
   const history = useHistory();
@@ -79,6 +81,7 @@ function UserRow(props) {
     history.push(url);
   };
   const onSave = () => {
+    dispatchLoading({ type: "Set-Loading", isLoading: true });
     const token = JSON.parse(localStorage.getItem("token"));
     const userUpdateData = {
       isActive: isActive,
@@ -103,11 +106,13 @@ function UserRow(props) {
           setIsActive(result.payload.isActive);
           setIsBlocked(result.payload.isBlocked);
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       })
       .catch((error) => {
         if (error) {
           console.log("error");
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       });
   };
   return (

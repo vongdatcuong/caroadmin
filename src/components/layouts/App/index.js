@@ -21,7 +21,6 @@ import Loading from "../Loading";
 import createHashHistory from "history/createHashHistory";
 import { SocketStateProvider } from "../../../context/socket-context";
 import { LoadingStateProvider } from "../../../context/loading-context";
-import Game from "../../../feature/Main/Game";
 import AccountValidation from "../../../feature/Authentication/AccountValidation";
 import ResetPassword from "../../../feature/Authentication/ResetPassword";
 import ForgetPassword from "../../../feature/Authentication/ForgetPassword";

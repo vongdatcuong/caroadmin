@@ -11,8 +11,9 @@ import TableFooter from "@material-ui/core/TableFooter";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import {loadingStore} from "../../../context/loading-context";
 // Material UI Icon
 // Components
 // Service
@@ -48,6 +49,7 @@ const PlayerManager = (props) => {
     history.push("/logIn");
   }
   const classes = useStyles();
+  const {loadingState, dispatchLoading} = useContext(loadingStore);
   const [allPlayerData, setAllPlayerData] = React.useState([]);
   const [playerData, setPlayerData] = React.useState([]);
   const [searchText, setSearchText] = React.useState('');
@@ -85,6 +87,7 @@ const PlayerManager = (props) => {
     setPlayerData(data);
   }
   useEffect(() => {
+    dispatchLoading({ type: "Set-Loading", isLoading: true });
     const token = JSON.parse(localStorage.getItem("token"));
     const requestOptions = {
       method: "GET",
@@ -100,11 +103,13 @@ const PlayerManager = (props) => {
           setAllPlayerData(result.users);
           setPlayerData(result.users);
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       })
       .catch((error) => {
         if (error) {
           console.log("error");
         }
+        dispatchLoading({ type: "Set-Loading", isLoading: false });
       });
   }, []);
 

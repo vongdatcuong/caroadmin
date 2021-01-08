@@ -12,6 +12,9 @@ import React from "react";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const useStyles = makeStyles((theme) => ({
+  dialog: {
+    zIndex: '800 !important' 
+  },
   appBar: {
     position: "relative",
   },
@@ -33,6 +36,7 @@ export default function FullScreenDialog(props) {
       open={props.isOpen}
       onClose={props.onClose}
       TransitionComponent={Transition}
+      className={classes.dialog}
     >
       <AppBar className={classes.appBar}>
         <Toolbar>
