@@ -169,7 +169,7 @@ export default function LogIn(props) {
       username: response.profileObj.email,
     };
     try {
-      let res = AuthService.googleLogin(googleresponse);
+      let res = await AuthService.googleLogin(googleresponse);
       let response = await res.json();
       if (response.success) {
         localStorage.setItem("token", response.token);
