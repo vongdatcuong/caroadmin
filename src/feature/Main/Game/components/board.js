@@ -4,9 +4,7 @@ import Square from "./square";
 
 export default function Board(props) {
   const renderSquare = (i) => {
-    const currentIndex =
-      (props.currentLocation.row - 1) * 3 + (props.currentLocation.col - 1);
-    const isCurrent = currentIndex === i;
+    const isCurrent = props.currentIndex === i;
     const winnerList = props.winnerList;
     const isWinner = winnerList ? winnerList.includes(i) : false;
     return (

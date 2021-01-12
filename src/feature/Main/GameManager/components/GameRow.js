@@ -29,9 +29,12 @@ import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import CloseIcon from "@material-ui/icons/Close";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { deepOrange } from "@material-ui/core/colors";
 import authService from "../../../../services/auth.service";
+import {config} from "../../../../config/index";
 import ChatTable from "./ChatTable";
+
 const useStyles = makeStyles((theme) => ({
   root1: {
     flexShrink: 0,
@@ -69,10 +72,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function GameRow(props) {
+  const history = useHistory();
   const [row, setRow] = useState(props.row);
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
   const currentUser = authService.getCurrentUser();
+
+  const handleSpecateGame = () => {
+    history.push(config.route.history + "/" + row._id);
+  }
+
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -201,7 +210,7 @@ function GameRow(props) {
                       <Button
                         variant="contained"
                         color="primary"
-                        href="#contained-buttons"
+                        onClick={handleSpecateGame}
                       >
                         View
                       </Button>

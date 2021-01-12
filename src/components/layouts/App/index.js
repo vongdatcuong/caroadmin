@@ -29,6 +29,8 @@ import Main from "../Main";
 import PlayerManager from "../../../feature/Main/PlayerManager";
 import StaffManager from "../../../feature/Main/StaffManager";
 import GameManager from "../../../feature/Main/GameManager";
+import History from "../../../feature/History";
+
 //const hashHistory = createHashHistory({ basename: process.env.PUBLIC_URL });
 
 function App() {
@@ -73,6 +75,9 @@ function App() {
                 <Main>
                   <GameManager />
                 </Main>
+              </Route>
+              <Route path="/history/:gameID">
+                <History />
               </Route>
               <Route path="/account-validation/:token">
                 <Header />

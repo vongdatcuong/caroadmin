@@ -31,11 +31,12 @@ ul {
   padding: 0;
   text-align: center;
   width: 34px;
+  color: #ff0000;
 }
 
 .square#current {
   background: #fff;
-  border: 1px solid #999;
+  border: 3px solid #ff0000;
   float: left;
   font-size: 24px;
   line-height: 34px;
@@ -46,6 +47,7 @@ ul {
   text-align: center;
   width: 34px;
   font-weight: bold;
+  color: #ff0000;
 }
 .square-o {
   background: #fff;
@@ -60,11 +62,12 @@ ul {
   padding: 0;
   text-align: center;
   width: 34px;
-  color: blue;
+  outline: none;
+  color: #0000ff;
 }
 .square-o#current {
   background: #fff;
-  border: 1px solid #999;
+  border: 3px solid #0000ff;
   float: left;
   font-size: 24px;
   line-height: 34px;
@@ -75,7 +78,11 @@ ul {
   text-align: center;
   width: 34px;
   font-weight: bold;
-  color: blue;
+  outline: none;
+  color: #0000ff;
+}
+.square-o#current:focus {
+  outline: none;
 }
 .square#win {
   background: #fff;
@@ -90,7 +97,23 @@ ul {
   text-align: center;
   width: 34px;
   font-weight: bold;
-  color: red;
+  color: #0d7e0d;
+}
+
+.square-o#win {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+  font-weight: bold;
+  color: #0d7e0d;
 }
 
 .square:focus {
