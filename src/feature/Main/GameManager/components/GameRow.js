@@ -204,7 +204,7 @@ function GameRow(props) {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item>
+                {/*<Grid item>
                   <Grid container justify="center" direction="row">
                     <Grid item>
                       <Button
@@ -216,7 +216,7 @@ function GameRow(props) {
                       </Button>
                     </Grid>
                   </Grid>
-                </Grid>
+                </Grid>*/}
                 <Grid item>
                   <Grid container justify="center" direction="row">
                     <Grid item>

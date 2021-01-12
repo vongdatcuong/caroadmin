@@ -13,7 +13,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
-    zIndex: '800 !important' 
+    zIndex: '10000 !important' 
   },
   appBar: {
     position: "relative",

@@ -116,7 +116,7 @@ export default function ChatTable(props) {
   const isSelected = (id) => selected.indexOf(id) !== -1;
   const handleDeleteChat = () => {
     let newChatList = rows.filter((n) => !selected.includes(n._id));
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const requestOptions = {
       method: "DELETE",
       headers: {

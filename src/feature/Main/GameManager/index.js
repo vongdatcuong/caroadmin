@@ -91,7 +91,7 @@ const GameManager = (props) => {
   };
   const fetchAllGame = () => {
     dispatchLoading({ type: "Set-Loading", isLoading: true });
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const requestOptions = {
       method: "GET",
       headers: {
@@ -118,7 +118,7 @@ const GameManager = (props) => {
   };
   const fetchUserGame = (user_id) => {
     dispatchLoading({ type: "Set-Loading", isLoading: true });
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const requestOptions = {
       method: "GET",
       headers: {

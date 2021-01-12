@@ -89,7 +89,7 @@ function StaffRow(props) {
     history.push(url);
   }
   const onSave = () => {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const userUpdateData = {
       isActive: isActive,
       isBlocked: isBlocked,

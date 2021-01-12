@@ -88,7 +88,7 @@ const DashBoard = (props) => {
     setPage(0);
   };
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const requestOptions = {
       method: "GET",
       headers: {
