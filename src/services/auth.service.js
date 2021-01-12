@@ -67,7 +67,7 @@ class AuthService {
   }
 
   signUp(username, password, name, email, isAdmin, isActive) {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const data = {
       username: username,
       password: password,

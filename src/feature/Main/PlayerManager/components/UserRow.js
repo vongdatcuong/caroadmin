@@ -82,7 +82,7 @@ function UserRow(props) {
   };
   const onSave = () => {
     dispatchLoading({ type: "Set-Loading", isLoading: true });
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const userUpdateData = {
       isActive: isActive,
       isBlocked: isBlocked,
