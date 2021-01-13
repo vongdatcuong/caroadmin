@@ -93,7 +93,7 @@ function StaffRow(props) {
     const userUpdateData = {
       isActive: isActive,
       isBlocked: isBlocked,
-      isAdmin: isAdmin ? "ADMIN" : "STAFF",
+      user_type: isAdmin ? "ADMIN" : "STAFF",
     };
     const requestOptions = {
       method: "PUT",

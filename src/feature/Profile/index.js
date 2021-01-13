@@ -173,7 +173,6 @@ export default function SignUp(props) {
         (result) => {
           if (result.isSuccess) {
             AuthService.updateCurrentUser(result.payload);
-            localStorage.setItem("user", JSON.stringify(result.payload));
             localStorage.setItem("token", result.token);
           }
           setIsSuccess(result.isSuccess);

@@ -103,9 +103,9 @@ function GameRow(props) {
         <TableCell align="center">
           {row.winner == "X" ? (
             <CloseIcon color="secondary" />
-          ) : (
+          ) : row.winner == "O" ? (
             <RadioButtonUncheckedIcon color="primary" />
-          )}
+          ) : "Draw"}
         </TableCell>
         <TableCell align="right">{Math.floor(row.totalTime / 1000)}s</TableCell>
         <TableCell align="center">{row.trophyTransferred}</TableCell>
